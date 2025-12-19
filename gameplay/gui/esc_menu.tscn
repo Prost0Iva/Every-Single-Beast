@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://b30fbkkfe4wlu"]
+
+[ext_resource type="Script" uid="uid://b2l74v836qmqi" path="res://gameplay/gui/esc_menu.gd" id="1_qruse"]
+
+[node name="EscMenu" type="CanvasLayer"]
+process_mode = 2
+script = ExtResource("1_qruse")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 76.0
+offset_top = 148.0
+offset_right = 1076.0
+offset_bottom = 500.0
+alignment = 1
+
+[node name="Back" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Назад"
+
+[node name="Leave" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Сохранить  и выйти"
+
+[connection signal="pressed" from="VBoxContainer/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="VBoxContainer/Leave" to="." method="_on_leave_pressed"]

@@ -1,0 +1,71 @@
+[gd_scene load_steps=7 format=3 uid="uid://dj70q7hl0c13p"]
+
+[ext_resource type="Texture2D" uid="uid://dmdl16c3fcgiv" path="res://assets/gui/gui.png" id="1_dds8v"]
+[ext_resource type="Script" uid="uid://yw5mh6xud7mi" path="res://gameplay/gui/mobile_control.gd" id="1_ptcuj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ptcuj"]
+atlas = ExtResource("1_dds8v")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eu2cq"]
+atlas = ExtResource("1_dds8v")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7hvru"]
+atlas = ExtResource("1_dds8v")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tsyn7"]
+atlas = ExtResource("1_dds8v")
+region = Rect2(0, 0, 32, 32)
+
+[node name="MobileControl" type="CanvasLayer"]
+script = ExtResource("1_ptcuj")
+
+[node name="Up" type="Button" parent="."]
+offset_left = 241.00003
+offset_top = 297.0
+offset_right = 281.00003
+offset_bottom = 337.0
+rotation = 1.5707964
+scale = Vector2(3, 3)
+icon = SubResource("AtlasTexture_ptcuj")
+flat = true
+
+[node name="Left" type="Button" parent="."]
+offset_left = 3.0
+offset_top = 411.0
+offset_right = 43.0
+offset_bottom = 451.0
+scale = Vector2(3, 3)
+icon = SubResource("AtlasTexture_eu2cq")
+flat = true
+
+[node name="Right" type="Button" parent="."]
+offset_left = 360.0
+offset_top = 530.00006
+offset_right = 400.0
+offset_bottom = 570.00006
+rotation = 3.1415927
+scale = Vector2(3, 3)
+icon = SubResource("AtlasTexture_7hvru")
+flat = true
+
+[node name="Down" type="Button" parent="."]
+offset_left = 122.00001
+offset_top = 647.0
+offset_right = 162.0
+offset_bottom = 687.0
+rotation = 4.712389
+scale = Vector2(3, 3)
+icon = SubResource("AtlasTexture_tsyn7")
+flat = true
+
+[connection signal="button_down" from="Up" to="." method="_on_up_button_down"]
+[connection signal="button_up" from="Up" to="." method="_on_up_button_up"]
+[connection signal="button_down" from="Left" to="." method="_on_left_button_down"]
+[connection signal="button_up" from="Left" to="." method="_on_left_button_up"]
+[connection signal="button_down" from="Right" to="." method="_on_right_button_down"]
+[connection signal="button_up" from="Right" to="." method="_on_right_button_up"]
+[connection signal="button_down" from="Down" to="." method="_on_down_button_down"]
+[connection signal="button_up" from="Down" to="." method="_on_down_button_up"]

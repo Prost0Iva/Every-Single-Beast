@@ -1,0 +1,35 @@
+[gd_scene load_steps=7 format=3 uid="uid://cg7sgr2my51i3"]
+
+[ext_resource type="Script" uid="uid://cxqer6tb8dgfl" path="res://gameplay/player/player.gd" id="1_qqgw4"]
+[ext_resource type="Texture2D" uid="uid://cd03b68rsjax5" path="res://assets/player/down_static.png" id="1_s3mhm"]
+[ext_resource type="PackedScene" uid="uid://dj70q7hl0c13p" path="res://gameplay/gui/mobile_control.tscn" id="2_wvk08"]
+[ext_resource type="PackedScene" uid="uid://b30fbkkfe4wlu" path="res://gameplay/gui/esc_menu.tscn" id="3_011tu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_011tu"]
+atlas = ExtResource("1_s3mhm")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qqgw4"]
+size = Vector2(12, 17)
+
+[node name="Player" type="CharacterBody2D"]
+visibility_layer = 2
+z_index = 2
+script = ExtResource("1_qqgw4")
+
+[node name="MobileControl" parent="." instance=ExtResource("2_wvk08")]
+
+[node name="EscMenu" parent="." instance=ExtResource("3_011tu")]
+visible = false
+
+[node name="Texture" type="Sprite2D" parent="."]
+position = Vector2(0, -10)
+texture = SubResource("AtlasTexture_011tu")
+
+[node name="Camera" type="Camera2D" parent="."]
+process_mode = 3
+zoom = Vector2(0.6, 0.6)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4.5)
+shape = SubResource("RectangleShape2D_qqgw4")
