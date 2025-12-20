@@ -4,8 +4,6 @@
 
 [node name="Menu" type="Node2D"]
 script = ExtResource("1_iots8")
-metadata/_edit_vertical_guides_ = [1152.0]
-metadata/_edit_horizontal_guides_ = [648.0]
 
 [node name="Container" type="VBoxContainer" parent="."]
 anchors_preset = 8

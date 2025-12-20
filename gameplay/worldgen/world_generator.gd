@@ -141,12 +141,14 @@ func set_chunk(chunk_pos: Vector2i):
 		thread.wait_to_finish()
 
 func get_chunk_data(start: Vector2i, end: Vector2i, chunk_pos: Vector2i):
-	if chunk_pos not in world_data.get("Chunks"):
+	var str_chp = str(chunk_pos)
+	
+	if str_chp not in world_data.get("Chunks"):
 		var temp_seed: int
 		var mois_seed: int
 		temp_seed = world_seed + 1
 		mois_seed = world_seed - 1
-		world_data["Chunks"][chunk_pos] ={ "Tiles": [], "Objects": {}, "Entities": {} }
+		world_data["Chunks"][str_chp] = { "Tiles": [], "Objects": {}, "Entities": {} }
 		for x in range(start.x, end.x):
 			for y in range(start.y, end.y):
 				noise.seed = world_seed
@@ -157,46 +159,50 @@ func get_chunk_data(start: Vector2i, end: Vector2i, chunk_pos: Vector2i):
 				var mois = 2 * abs(noise.get_noise_2d(x, y))
 				
 				var ambient = rng.randf_range(0, 1)
+				var cell = str(Vector2i(x, y))
 				
 				if between(height, 0, .13):
-					world_data["Chunks"][chunk_pos]["Tiles"].append(0)
+					world_data["Chunks"][str_chp]["Tiles"].append(0)
 				elif between(height, .15, .2):
-					world_data["Chunks"][chunk_pos]["Tiles"].append(3)
+					world_data["Chunks"][str_chp]["Tiles"].append(3)
 				elif between(height, .2, .23):
-					world_data["Chunks"][chunk_pos]["Tiles"].append(5)
+					world_data["Chunks"][str_chp]["Tiles"].append(5)
 				elif between(height, .23, 1):
 					if between(temp, .4, .8):
 						if between(mois, .3, .7):
-							world_data["Chunks"][chunk_pos]["Tiles"].append(1)
+							world_data["Chunks"][str_chp]["Tiles"].append(1)
 							if between(ambient, 0, .008):
-								world_data["Chunks"][chunk_pos]["Objects"][Vector2i(x, y)] = {"id": oak_tree}
-						else: world_data["Chunks"][chunk_pos]["Tiles"].append(0)
+								world_data["Chunks"][str_chp]["Objects"][cell] = {"id": oak_tree}
+						else: world_data["Chunks"][str_chp]["Tiles"].append(0)
 					elif between(temp, .2, .4):
 						if between(mois, .2, .7):
-							world_data["Chunks"][chunk_pos]["Tiles"].append(6)
-						else: world_data["Chunks"][chunk_pos]["Tiles"].append(0)
+							world_data["Chunks"][str_chp]["Tiles"].append(6)
+						else: world_data["Chunks"][str_chp]["Tiles"].append(0)
 					elif between(temp, 0, .2):
 						if between(mois, .7, 1):
-							world_data["Chunks"][chunk_pos]["Tiles"].append(8)
-						else: world_data["Chunks"][chunk_pos]["Tiles"].append(0)
+							world_data["Chunks"][str_chp]["Tiles"].append(8)
+						else: world_data["Chunks"][str_chp]["Tiles"].append(0)
 					elif between(temp, .8, 1):
 						if between(mois, 0, .3):
-							world_data["Chunks"][chunk_pos]["Tiles"].append(10)
-						else: world_data["Chunks"][chunk_pos]["Tiles"].append(0)
-					else: world_data["Chunks"][chunk_pos]["Tiles"].append(0)
-				else: world_data["Chunks"][chunk_pos]["Tiles"].append(0)
+							world_data["Chunks"][str_chp]["Tiles"].append(10)
+						else: world_data["Chunks"][str_chp]["Tiles"].append(0)
+					else: world_data["Chunks"][str_chp]["Tiles"].append(0)
+				else: world_data["Chunks"][str_chp]["Tiles"].append(0)
 	call_deferred("place_chunk", start, end, chunk_pos)
 
 func place_chunk(start: Vector2i, end: Vector2i, chunk_pos: Vector2i):
 	var i: int = 0
+	var str_chp = str(chunk_pos)
+	
 	for x in range(start.x, end.x):
 		for y in range(start.y, end.y):
 			var cell = Vector2i(x, y)
-			var tile_id = world_data["Chunks"][chunk_pos]["Tiles"][i]
-			if cell in world_data["Chunks"][chunk_pos]["Objects"]:
-				world_data["Chunks"][chunk_pos]["Objects"][cell]["scene"] = load(world_data["Chunks"][chunk_pos]["Objects"][cell]["id"]).instantiate()
-				world_data["Chunks"][chunk_pos]["Objects"][cell]["scene"].position = pos_convert(cell, "Tile", "Def")
-				add_child(world_data["Chunks"][chunk_pos]["Objects"][cell]["scene"])
+			var str_cell = str(cell)
+			var tile_id = world_data["Chunks"][str_chp]["Tiles"][i]
+			if str_cell in world_data["Chunks"][str_chp]["Objects"]:
+				world_data["Chunks"][str_chp]["Objects"][str_cell]["scene"] = load(world_data["Chunks"][str_chp]["Objects"][str_cell]["id"]).instantiate()
+				world_data["Chunks"][str_chp]["Objects"][str_cell]["scene"].position = pos_convert(cell, "Tile", "Def")
+				add_child(world_data["Chunks"][str_chp]["Objects"][str_cell]["scene"])
 			biome_tile_map.set_cell(cell, tile_id, Vector2i(0, tile_id))
 			i += 1
 			if i % 64 == 0:
@@ -209,9 +215,11 @@ func remove_chunk(chunk_pos: Vector2i):
 	for x in range(start.x, end.x):
 		for y in range(start.y, end.y):
 			var cell = Vector2i(x, y)
+			var str_cell = str(cell)
+			var str_chp = str(chunk_pos)
 			biome_tile_map.erase_cell(cell)
-			if cell in world_data["Chunks"][chunk_pos]["Objects"] and world_data["Chunks"][chunk_pos]["Objects"][cell]["scene"] != null:
-				world_data["Chunks"][chunk_pos]["Objects"][cell]["scene"].queue_free()
+			if str_cell in world_data["Chunks"][str_chp]["Objects"] and world_data["Chunks"][str_chp]["Objects"][str_cell]["scene"] != null:
+				world_data["Chunks"][str_chp]["Objects"][str_cell]["scene"].queue_free()
 			i += 1
 			if i % 64 == 0:
 				await get_tree().process_frame
@@ -232,7 +240,7 @@ func load_world():
 		return
 
 	world_data = json.get_data()
-	print("Мир загружен")
+	print(world_data)
 
 func save_world():
 	print("Мир сохранён")
