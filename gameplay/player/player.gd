@@ -4,6 +4,7 @@ var speed: float = 0
 var end_speed: float = 200
 var acceleration: float = 15
 var deceleration: float = 25
+var mouse_pos: Vector2
 
 func _ready() -> void:
 	$EscMenu.visible = false

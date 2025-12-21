@@ -41,12 +41,12 @@ func _ready():
 	chunk_size = world_data["chunk_size"]
 	if world_data["world_seed"]:
 		world_seed = world_data["world_seed"]
-		print("сид из сейва")
+		#print("сид из сейва")
 	#Генерируем сид, если не задан пользовательский
 	if not world_seed:
 		world_seed = rng.randi()
 		world_data["world_seed"] = world_seed
-		print("сид рандомны")
+		#print("сид рандомны")
 
 var last_player_chunk_pos: Vector2i = Vector2i(7, 7)
 func _physics_process(_delta: float):
@@ -240,10 +240,9 @@ func load_world():
 		return
 
 	world_data = json.get_data()
-	print(world_data)
 
 func save_world():
-	print("Мир сохранён")
+	#print("Мир сохранён")
 	var save_file = FileAccess.open("user://save_1.save", FileAccess.WRITE)
 	var json_string = JSON.stringify(world_data)
 	save_file.store_line(json_string)
