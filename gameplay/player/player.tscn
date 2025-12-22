@@ -280,3 +280,4 @@ position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_qqgw4")
 
 [node name="PlayerAttack" parent="." instance=ExtResource("5_2uk1t")]
+z_index = 2

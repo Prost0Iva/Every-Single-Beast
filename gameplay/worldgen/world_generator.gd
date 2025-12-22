@@ -1,7 +1,8 @@
 extends Node2D
+class_name WorldGen
 
 #Динамические данные мира
-var world_data: Dictionary = {
+@export var world_data: Dictionary = {
 	"chunk_size": 16,
 	"world_freq": .001,
 	"world_seed": null,
@@ -94,18 +95,18 @@ func render_chunks(to_set: Array, to_remove: Array):
 		chunks_in_render_dist.erase(i)
 		await get_tree().process_frame
 
-func between(value: float, start: float, end: float):
+static func between(value: float, start: float, end: float):
 	return value >= start and value < end
 
-func pos_convert(pos: Vector2, from: String, to: String):
+static func pos_convert(pos: Vector2, from: String, to: String):
 	match from:
 		"Def":
 			match to:
 				"Tile":
-					return biome_tile_map.local_to_map(pos)
+					return Vector2i(pos/32)
 				"Chunk":
-					var tile_pos = biome_tile_map.local_to_map(pos)
-					var chunk_pos = Vector2i(tile_pos / chunk_size)
+					var tile_pos = pos/32
+					var chunk_pos = Vector2i(tile_pos / 16)
 					if tile_pos.x < 0 and tile_pos.y >= 0:
 						chunk_pos.x -= 1
 						return chunk_pos
@@ -120,15 +121,15 @@ func pos_convert(pos: Vector2, from: String, to: String):
 		"Tile":
 			match to:
 				"Def":
-					return biome_tile_map.map_to_local(pos)
+					return pos*32
 				"Chunk":
-					return Vector2i(pos / chunk_size)
+					return Vector2i(pos/16)
 		"Chunk":
 			match to:
 				"Tile":
-					return Vector2i(pos * chunk_size)
+					return Vector2i(pos*16)
 				"Def":
-					return biome_tile_map.map_to_local(pos * chunk_size)
+					return pos*16*32
 
 func set_chunk(chunk_pos: Vector2i):
 	var start = pos_convert(chunk_pos, "Chunk", "Tile")
@@ -200,9 +201,9 @@ func place_chunk(start: Vector2i, end: Vector2i, chunk_pos: Vector2i):
 			var str_cell = str(cell)
 			var tile_id = world_data["Chunks"][str_chp]["Tiles"][i]
 			if str_cell in world_data["Chunks"][str_chp]["Objects"]:
-				world_data["Chunks"][str_chp]["Objects"][str_cell]["scene"] = load(world_data["Chunks"][str_chp]["Objects"][str_cell]["id"]).instantiate()
-				world_data["Chunks"][str_chp]["Objects"][str_cell]["scene"].position = pos_convert(cell, "Tile", "Def")
-				add_child(world_data["Chunks"][str_chp]["Objects"][str_cell]["scene"])
+				world_data["Chunks"][str_chp]["Objects"][str_cell]["Scene"] = load(world_data["Chunks"][str_chp]["Objects"][str_cell]["id"]).instantiate()
+				world_data["Chunks"][str_chp]["Objects"][str_cell]["Scene"].position = pos_convert(cell, "Tile", "Def")
+				add_child(world_data["Chunks"][str_chp]["Objects"][str_cell]["Scene"])
 			biome_tile_map.set_cell(cell, tile_id, Vector2i(0, tile_id))
 			i += 1
 			if i % 64 == 0:
@@ -218,8 +219,8 @@ func remove_chunk(chunk_pos: Vector2i):
 			var str_cell = str(cell)
 			var str_chp = str(chunk_pos)
 			biome_tile_map.erase_cell(cell)
-			if str_cell in world_data["Chunks"][str_chp]["Objects"] and world_data["Chunks"][str_chp]["Objects"][str_cell]["scene"] != null:
-				world_data["Chunks"][str_chp]["Objects"][str_cell]["scene"].queue_free()
+			if str_cell in world_data["Chunks"][str_chp]["Objects"] and world_data["Chunks"][str_chp]["Objects"][str_cell]["Scene"] != null:
+				world_data["Chunks"][str_chp]["Objects"][str_cell]["Scene"].queue_free()
 			i += 1
 			if i % 64 == 0:
 				await get_tree().process_frame
