@@ -1,6 +1,11 @@
 extends StaticBody2D
 
-@export var health: float = 15
+@export var health: float = 15:
+	set(value):
+		if health == value:
+			return
+		health = value
+		damaged()
 
 func _physics_process(_delta: float) -> void:
 	if health <= 0:
@@ -20,11 +25,25 @@ func die():
 	var tile= str(WorldGen.pos_convert(position, "Def", "Tile"))
 	var chunk = str(WorldGen.pos_convert(position, "Def", "Chunk"))
 	
-	#print($"..".world_data["Chunks"][chunk]["Objects"][tile]["Scene"])
-	#print($"..".world_data["Chunks"][chunk]["Objects"][tile])
-	#print($"..".world_data["Chunks"][chunk]["Objects"])
-	#print($"..".world_data["Chunks"][chunk])
+
 	
 	if $"..".world_data["Chunks"][chunk]["Objects"][tile]["Scene"] == self:
 		$"..".world_data["Chunks"][chunk]["Objects"].erase(tile)
 		queue_free()
+
+func damaged():
+	var tween_1 = get_tree().create_tween()
+	var tween_2 = get_tree().create_tween()
+	var tween_3 = get_tree().create_tween()
+	var tween_4 = get_tree().create_tween()
+	tween_1.tween_property($CollisionShape/Oak, "self_modulate:g", 0, .4)
+	tween_2.tween_property($CollisionShape/Oak, "self_modulate:b", 0, .4)
+	
+	tween_1.tween_property($CollisionShape/Oak, "self_modulate:g", 1, .4)
+	tween_2.tween_property($CollisionShape/Oak, "self_modulate:b", 1, .4)
+	
+	tween_3.tween_property($Area/CollisionShape2/Leaves, "self_modulate:g", 0, .4)
+	tween_4.tween_property($Adrea/CollisionShape2/Leaves, "self_modulate:b", 0, .4)
+	
+	tween_3.tween_property($Area/CollisionShape2/Leaves, "self_modulate:g", 1, .4)
+	tween_4.tween_property($Area/CollisionShape2/Leaves, "self_modulate:b", 1, .4)
