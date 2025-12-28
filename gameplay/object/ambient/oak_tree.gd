@@ -25,8 +25,6 @@ func die():
 	var tile= str(WorldGen.pos_convert(position, "Def", "Tile"))
 	var chunk = str(WorldGen.pos_convert(position, "Def", "Chunk"))
 	
-
-	
 	if $"..".world_data["Chunks"][chunk]["Objects"][tile]["Scene"] == self:
 		$"..".world_data["Chunks"][chunk]["Objects"].erase(tile)
 		queue_free()
@@ -36,14 +34,20 @@ func damaged():
 	var tween_2 = get_tree().create_tween()
 	var tween_3 = get_tree().create_tween()
 	var tween_4 = get_tree().create_tween()
-	tween_1.tween_property($CollisionShape/Oak, "self_modulate:g", 0, .4)
-	tween_2.tween_property($CollisionShape/Oak, "self_modulate:b", 0, .4)
+	var tween_5 = get_tree().create_tween()
+	var tween_6 = get_tree().create_tween()
+	tween_1.tween_property($CollisionShape/Oak, "self_modulate:r", 1.5, .2)
+	tween_2.tween_property($CollisionShape/Oak, "self_modulate:g", 1.5, .2)
+	tween_3.tween_property($CollisionShape/Oak, "self_modulate:b", 1.5, .2)
 	
-	tween_1.tween_property($CollisionShape/Oak, "self_modulate:g", 1, .4)
-	tween_2.tween_property($CollisionShape/Oak, "self_modulate:b", 1, .4)
+	tween_1.tween_property($CollisionShape/Oak, "self_modulate:r", 1, .2)
+	tween_2.tween_property($CollisionShape/Oak, "self_modulate:g", 1, .2)
+	tween_3.tween_property($CollisionShape/Oak, "self_modulate:b", 1, .2)
 	
-	tween_3.tween_property($Area/CollisionShape2/Leaves, "self_modulate:g", 0, .4)
-	tween_4.tween_property($Adrea/CollisionShape2/Leaves, "self_modulate:b", 0, .4)
+	tween_4.tween_property($Area/CollisionShape2/Leaves, "self_modulate:r", 1.5, .2)
+	tween_5.tween_property($Area/CollisionShape2/Leaves, "self_modulate:g", 1.5, .2)
+	tween_6.tween_property($Area/CollisionShape2/Leaves, "self_modulate:b", 1.5, .2)
 	
-	tween_3.tween_property($Area/CollisionShape2/Leaves, "self_modulate:g", 1, .4)
-	tween_4.tween_property($Area/CollisionShape2/Leaves, "self_modulate:b", 1, .4)
+	tween_4.tween_property($Area/CollisionShape2/Leaves, "self_modulate:r", 1, .2)
+	tween_5.tween_property($Area/CollisionShape2/Leaves, "self_modulate:g", 1, .2)
+	tween_6.tween_property($Area/CollisionShape2/Leaves, "self_modulate:b", 1, .2)

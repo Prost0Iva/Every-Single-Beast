@@ -3,8 +3,8 @@ class_name WorldGen
 
 #Динамические данные мира
 @export var world_data: Dictionary = {
-	"chunk_size": 16,
-	"world_freq": .001,
+	"chunk_size": null,
+	"world_freq": null,
 	"world_seed": null,
 	"Chunks": {},
 	"Player": {
@@ -38,16 +38,21 @@ func _ready():
 	load_world()
 	#Задаём нужные параметры
 	$"../Player".position = Vector2(world_data["Player"]["Position"][0], world_data["Player"]["Position"][1])
-	noise.frequency = world_data["world_freq"]
-	chunk_size = world_data["chunk_size"]
-	if world_data["world_seed"]:
-		world_seed = world_data["world_seed"]
-		#print("сид из сейва")
-	#Генерируем сид, если не задан пользовательский
+	
+	if not chunk_size:
+		chunk_size = 16
+		world_data["chunk_size"] = chunk_size
+	else: chunk_size = world_data["chunk_size"]
+	
+	if not world_data["world_freq"]:
+		world_data["world_freq"] = .001
+		noise.frequency = world_data["world_freq"]
+	else: noise.frequency = world_data["world_freq"]
+	
 	if not world_seed:
 		world_seed = rng.randi()
 		world_data["world_seed"] = world_seed
-		#print("сид рандомны")
+	else: world_seed = world_data["world_seed"]
 
 var last_player_chunk_pos: Vector2i = Vector2i(7, 7)
 func _physics_process(_delta: float):
@@ -174,21 +179,21 @@ func get_chunk_data(start: Vector2i, end: Vector2i, chunk_pos: Vector2i):
 							world_data["Chunks"][str_chp]["Tiles"].append(1)
 							if between(ambient, 0, .008):
 								world_data["Chunks"][str_chp]["Objects"][cell] = {"id": oak_tree}
-						else: world_data["Chunks"][str_chp]["Tiles"].append(0)
+						else: world_data["Chunks"][str_chp]["Tiles"].append(1)
 					elif between(temp, .2, .4):
 						if between(mois, .2, .7):
 							world_data["Chunks"][str_chp]["Tiles"].append(6)
-						else: world_data["Chunks"][str_chp]["Tiles"].append(0)
+						else: world_data["Chunks"][str_chp]["Tiles"].append(1)
 					elif between(temp, 0, .2):
 						if between(mois, .7, 1):
 							world_data["Chunks"][str_chp]["Tiles"].append(8)
-						else: world_data["Chunks"][str_chp]["Tiles"].append(0)
+						else: world_data["Chunks"][str_chp]["Tiles"].append(1)
 					elif between(temp, .8, 1):
 						if between(mois, 0, .3):
 							world_data["Chunks"][str_chp]["Tiles"].append(10)
-						else: world_data["Chunks"][str_chp]["Tiles"].append(0)
-					else: world_data["Chunks"][str_chp]["Tiles"].append(0)
-				else: world_data["Chunks"][str_chp]["Tiles"].append(0)
+						else: world_data["Chunks"][str_chp]["Tiles"].append(1)
+					else: world_data["Chunks"][str_chp]["Tiles"].append(1)
+				else: world_data["Chunks"][str_chp]["Tiles"].append(1)
 	call_deferred("place_chunk", start, end, chunk_pos)
 
 func place_chunk(start: Vector2i, end: Vector2i, chunk_pos: Vector2i):
@@ -224,6 +229,8 @@ func remove_chunk(chunk_pos: Vector2i):
 			i += 1
 			if i % 64 == 0:
 				await get_tree().process_frame
+
+
 
 func _exit_tree():
 	save_world()

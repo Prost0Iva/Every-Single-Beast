@@ -82,7 +82,7 @@ shape = ExtResource("2_72a1o")
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 rotation = 1.5707964
 sprite_frames = SubResource("SpriteFrames_kqdqp")
-animation = &"fist"
+animation = &"none"
 offset = Vector2(0, -16)
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

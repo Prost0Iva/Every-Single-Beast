@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://bikepg3xnyseh"]
+[gd_scene load_steps=4 format=3 uid="uid://bikepg3xnyseh"]
 
 [ext_resource type="PackedScene" uid="uid://cg7sgr2my51i3" path="res://gameplay/player/player.tscn" id="2_hp8fw"]
+[ext_resource type="PackedScene" uid="uid://cexwiga1qme6h" path="res://gameplay/object/ambient/oak_tree.tscn" id="3_hp8fw"]
 [ext_resource type="PackedScene" uid="uid://beeanlrwimt7n" path="res://gameplay/worldgen/world_generator.tscn" id="3_kify7"]
 
 [node name="Save1" type="Node2D"]
@@ -9,3 +10,5 @@
 
 [node name="WorldGenerator" parent="." instance=ExtResource("3_kify7")]
 process_mode = 3
+
+[node name="OakTree" parent="." instance=ExtResource("3_hp8fw")]
